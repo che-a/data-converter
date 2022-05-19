@@ -1,5 +1,7 @@
+!#/usr/bin/env python3
+
 """
-Скрипт преобразования данных их Excel таблицы в JSON-файл.
+Скрипт преобразования всех или части данных из Excel-таблицы в JSON-файл.
 """
 import json
 from pprint import pprint
