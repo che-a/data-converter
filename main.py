@@ -1,27 +1,37 @@
+#!/usr/bin/env python3
 """
 Скрипт преобразования данных из файла Excel в файл JSON.
 """
+import argparse
 import json
 
 from openpyxl import load_workbook
 
-FILE_LIMITS = "limits.json"
-FILE_INPUT = "input.xlsx"
-FILE_OUTPUT = "output.json"
-ERROR_NOT_FOUND_LIMITS_FILE = 2
+DEFAULT_SETTINGS_FILE = "settings.json"
+DEFAULT_INPUT_FILE = "input.xlsx"
+DEFAULT_OUTPUT_FILE = "output.json"
+
+ERROR_NOT_FOUND_SETTINGS_FILE = 2
 ERROR_NOT_FOUND_INPUT_FILE = 3
 
 
-def load_limits_file(filename=FILE_LIMITS):
-    """Загрузка JSON-файла с настройками ограничений."""
+def load_settings_file(filename=DEFAULT_SETTINGS_FILE):
+    """
+    Загрузка JSON-файла с настройками
+    :param filename: имя JSON-файла
+    :return: загруженный из JSON-файла словарь
+    """
     with open(filename) as json_file:
         result = json.load(json_file)
     return result
 
 
-def load_excel_file(limits_dict, filename=FILE_INPUT):
+def load_excel_file(limits_dict, filename):
     """
-    Загрузка данных из Excel-файла.
+    Загрузка содержимого Excel-файла согласно настроек ограничений.
+    :param limits_dict: словарь с настройками ограничений.
+    :param filename: имя входящего Excel-файла.
+    :return: словарь с данными.
     """
     wb = load_workbook(filename)
     ws = wb[limits_dict['sheet']]
@@ -38,27 +48,32 @@ def load_excel_file(limits_dict, filename=FILE_INPUT):
     return result
 
 
-def save_json_file(data_dict, filename=FILE_OUTPUT):
+def save_json_file(data_dict, filename):
     with open(filename, 'w') as outfile:
         json.dump(data_dict, outfile, indent=4, ensure_ascii=False)
 
 
 if __name__ == '__main__':
-    # Чтение JSON-файла с настройками ограничений.
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("-i", dest="input_file", default=DEFAULT_INPUT_FILE, type=str, help="Входной Excel-файл")
+    parser.add_argument("-o", dest="output_file", default=DEFAULT_OUTPUT_FILE, type=str, help="Выходной JSON-файл")
+    args = parser.parse_args()
+
+    # Чтение файла с настройками
     limits = dict()
     try:
-        limits = load_limits_file()
+        limits = load_settings_file()
     except FileNotFoundError:
-        print(f"Ошибка: не найден файл {FILE_LIMITS}")
-        exit(ERROR_NOT_FOUND_LIMITS_FILE)
+        print(f"ОШИБКА: не найден файл настроек {DEFAULT_SETTINGS_FILE}")
+        exit(ERROR_NOT_FOUND_SETTINGS_FILE)
 
-    # Чтение входного Excel-файла.
+    # Чтение входного Excel-файла
     data = dict()
     try:
-        data = load_excel_file(limits)
+        data = load_excel_file(limits, args.input_file)
     except FileNotFoundError:
-        print(f"Ошибка: не найден файл {FILE_INPUT}")
+        print(f"ОШИБКА: не найден файл {args.input_file}")
         exit(ERROR_NOT_FOUND_INPUT_FILE)
 
-    # Сохранение JSON-файла
-    save_json_file(data)
+    # Сохранение JSON-файла с выгруженными данными
+    save_json_file(data, args.output_file)
