@@ -1,20 +1,21 @@
 {
-  "sheet": "Лист1",
-  "begin_row": 13,
-  "end_row": 17,
-  "exclude_rows": [
-    11,
-    12
-  ],
-  "unique_key_column": "B",
-  "columns": {
-    "serial_number": "A",
-    "its_number": "B",
-    "vpn_deploy": "R",
-    "vpn_tech": "S",
-    "vpn_data": "T",
-    "speed_markup": "W",
-    "cam1_coord": "AF",
-    "cam2_coord": "AG"
-  }
+    "sheet": "Лист1",
+    "begin_row": 3,
+    "end_row": 48,
+    "exclude_rows": [
+        11,
+        12
+    ],
+    "unique_key_column": "A",
+    "columns": {
+        "serial_number": "A",
+        "its_number": "B",
+        "address": "H",
+        "vpn_deploy": "R",
+        "vpn_tech": "S",
+        "vpn_data": "T",
+        "speed_markup": "W",
+        "cam1_coord": "AF",
+        "cam2_coord": "AG"
+    }
 }
