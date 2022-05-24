@@ -3,5 +3,9 @@
 
 ## Установка
 ```sh
-pip3 install openpyxl 
+# Развертывание в виртуальном окружении
+python3 -m venv env
+source env/bin/activate
+pip3 install --upgrade pip setuptools
+pip3 install openpyxl
 ```
